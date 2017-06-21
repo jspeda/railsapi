@@ -86,5 +86,20 @@ RSpec.describe NotesController, type: :controller do
             expect(json["errors"]["title"][0]).to eq("can't be blank")
         end
     end
+    
+    describe "notes#destroy action" do
+        it "should destroy a saved note" do
+            note = FactoryGirl.create(:note)
+            delete :destroy, params: { id: note.id }
+            note = Note.find_by_id(note.id)
+            expect(note).to eq nil
+        end
+        
+        it "should return no_content status" do
+            note = FactoryGirl.create(:note)
+            delete :destroy, params: { id: note.id }
+            expect(response).to have_http_status(:no_content)
+        end
+    end
 
 end
